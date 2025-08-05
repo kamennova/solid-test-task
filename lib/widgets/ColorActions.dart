@@ -10,16 +10,16 @@ class ColorActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (_, state, __) {
-        final contrastColor = getContrastColor(state.color);
+        final contrastColor = getContrastColor(state.currColor);
 
-        if (state.saved.contains(state.color)) {
+        if (state.saved.contains(state.currColor)) {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _SavedBadge(color: state.color),
+              _SavedBadge(color: state.currColor),
               const SizedBox(width: 5),
               TextButton(
-                onPressed: () => state.deleteFromSaved(state.color),
+                onPressed: () => state.deleteFromSaved(state.currColor),
                 child: Text(
                   "Delete from lib",
                   style: TextStyle(color: contrastColor, fontSize: 17),
@@ -55,16 +55,16 @@ class _SavedBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(7, 3, 10, 3),
       decoration: BoxDecoration(
-        color: getContrastColor(context.watch<AppState>().color),
+        color: getContrastColor(context.watch<AppState>().currColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
-          Icon(Icons.check, color: context.watch<AppState>().color, size: 18),
+          Icon(Icons.check, color: context.watch<AppState>().currColor, size: 18),
           const SizedBox(width: 4),
           Text(
             "Saved",
-            style: TextStyle(color: context.watch<AppState>().color),
+            style: TextStyle(color: context.watch<AppState>().currColor),
           ),
         ],
       ),

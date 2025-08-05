@@ -10,7 +10,7 @@ class ColorsLib extends StatelessWidget {
 
     return Consumer<AppState>(
       builder: (_, s, __) {
-        final Color contrastColor = getContrastColor(s.color);
+        final Color contrastColor = getContrastColor(s.currColor);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,8 +71,8 @@ class ColorsLibItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (_, s, __) {
-        final Color contrastColor = getContrastColor(s.color);
-        final bool isSelected = s.color == color;
+        final Color contrastColor = getContrastColor(s.currColor);
+        final bool isSelected = s.currColor == color;
 
         return Padding(
           padding: const EdgeInsets.only(right: 13, bottom: 4, top: 4),

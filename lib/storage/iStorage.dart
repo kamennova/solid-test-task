@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-abstract class IStorage {
+abstract class Storage {
   Future<Color?> getLastColor();
 
   Future<void> saveLastColor(Color color);

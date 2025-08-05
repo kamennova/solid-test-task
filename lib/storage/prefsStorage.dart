@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solid_test_task/storage/iStorage.dart';
 
-class PrefStorage implements IStorage {
+class PrefStorage implements Storage {
   static final PrefStorage instance = PrefStorage._privateConstructor();
 
   static SharedPreferences? _prefs;
@@ -27,15 +27,14 @@ class PrefStorage implements IStorage {
   }
 
   Future<void> saveLastColor(Color color) async {
-    await (await prefs).setString(_LastColorKey, _getColorStr(color));
+    final SharedPreferences pr = await prefs;
+    await pr.setString(_LastColorKey, _getColorStr(color));
   }
 
   Future<void> saveColorToLib(Color color) async {
     final SharedPreferences pr = await prefs;
 
     final List<Color> saved = await getSavedColors();
-
-    if (saved.any((c) => c == color)) return;
     final List<String> toStr = [...saved, color].map(_getColorStr).toList();
 
     await pr.setStringList(_SavedColorsKey, toStr);
