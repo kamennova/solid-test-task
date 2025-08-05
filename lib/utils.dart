@@ -1,5 +1,6 @@
 import 'dart:math';
-import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 const int _ColorMaxChannel = 255;
 
@@ -18,3 +19,7 @@ Color getRandomColor() {
 
   return Color.fromRGBO(r, g, b, 1);
 }
+
+
+Color getContrastColor(Color color) => isColorLight(color) ? Colors.black :Colors.white;
+

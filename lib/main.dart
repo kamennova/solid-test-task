@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solid_test_task/ColorScreen.dart';
-import 'package:solid_test_task/LoadingScreen.dart';
-import 'package:solid_test_task/storage.dart';
+import 'package:solid_test_task/widgets/ColorScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,18 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Solid Software Test task',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: FutureBuilder<Color?>(
-        future: Storage.instance.getLastColor(),
-        builder: (_, data) {
-          if (!data.hasData) return LoadingScreen();
-
-          return ColorScreen(initColor: data.data);
-        },
-      ),
+      home: const ColorScreen()
     );
   }
 }
