@@ -8,7 +8,7 @@ class PrefStorage implements Storage {
 
   static SharedPreferences? _prefs;
 
-  static const String _LastColorKey = "last_color";
+  static const String _LastShownColorKey = "last_shown_color";
   static const String _SavedColorsKey = "saved_colors";
 
   Future<SharedPreferences> get prefs async {
@@ -20,32 +20,32 @@ class PrefStorage implements Storage {
   PrefStorage._privateConstructor();
 
   @override
-  Future<Color?> getLastColor() async {
+  Future<Color?> getLastShownColor() async {
     final SharedPreferences pr = await prefs;
-    final Object? res = pr.get(_LastColorKey);
+    final Object? res = pr.get(_LastShownColorKey);
     if (res == null) return null;
 
     return _parseColorStr(res as String);
   }
 
   @override
-  Future<void> saveLastColor(Color color) async {
+  Future<void> saveLastShownColor(Color color) async {
     final SharedPreferences pr = await prefs;
-    await pr.setString(_LastColorKey, _getColorStr(color));
+    await pr.setString(_LastShownColorKey, _getColorStr(color));
   }
 
   @override
-  Future<void> saveColorToLib(Color color) async {
+  Future<void> addColorToSaved(Color color) async {
     final SharedPreferences pr = await prefs;
 
     final List<Color> saved = await getSavedColors();
-    final List<String> toStr = [...saved, color].map(_getColorStr).toList();
+    final List<String> toStr = [color, ...saved].map(_getColorStr).toList();
 
     await pr.setStringList(_SavedColorsKey, toStr);
   }
 
   @override
-  Future<void> deleteColorFromLib(Color color) async {
+  Future<void> deleteColorFromSaved(Color color) async {
     final SharedPreferences pr = await prefs;
 
     final List<Color> saved = await getSavedColors();

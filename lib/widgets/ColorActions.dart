@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:solid_test_task/AppState.dart';
 import 'package:solid_test_task/utils.dart';
 
+/// Component with current color action button
+/// save if not saved, delete if it is
 class ColorActions extends StatelessWidget {
   const ColorActions({super.key});
 

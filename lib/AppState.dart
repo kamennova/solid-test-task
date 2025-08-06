@@ -6,6 +6,7 @@ import 'package:solid_test_task/storage/prefsStorage.dart';
 import 'package:solid_test_task/utils.dart';
 
 class AppState extends ChangeNotifier {
+  /// shown on first app open and while loading last shown color from storage
   static const Color DefaultColor = Colors.white;
 
   Color _color = DefaultColor;
@@ -31,7 +32,7 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> _loadFromStorage() async {
-    final Color? last = await _storage.getLastColor();
+    final Color? last = await _storage.getLastShownColor();
     _color = last ?? DefaultColor;
 
     final List<Color> saved = await _storage.getSavedColors();
@@ -45,7 +46,7 @@ class AppState extends ChangeNotifier {
   /// and persist it to show it first on next app open
   void setCurrColor(Color upd) {
     _color = upd;
-    _storage.saveLastColor(currColor);
+    _storage.saveLastShownColor(currColor);
 
     notifyListeners();
   }
@@ -54,15 +55,15 @@ class AppState extends ChangeNotifier {
   void addColorToSaved(Color toSave) {
     if (_saved.contains(toSave)) return;
 
-    _saved.add(toSave);
-    _storage.saveColorToLib(toSave);
+    _saved.insert(0, toSave);
+    _storage.addColorToSaved(toSave);
 
     notifyListeners();
   }
 
   void deleteFromSaved(Color color) {
     _saved.remove(color);
-    _storage.deleteColorFromLib(color);
+    _storage.deleteColorFromSaved(color);
 
     notifyListeners();
   }

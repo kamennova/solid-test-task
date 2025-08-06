@@ -3,15 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:solid_test_task/AppState.dart';
 import 'package:solid_test_task/utils.dart';
 
+/// Shows user's collection of saved colors
 class ColorsLib extends StatelessWidget {
   static const double _SplashSize = 60;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
-      builder: (_, s, __) {
-        final Color contrastColor = getContrastColor(s.currColor);
-
+      builder: (_, state, __) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,20 +21,25 @@ class ColorsLib extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: contrastColor,
+                  color: state.currContrastColor,
                 ),
               ),
             ),
 
-            if (s.savedColors.isEmpty)
+            if (state.savedColors.isEmpty)
               Padding(
                 padding: const EdgeInsets.only(left: 25),
-                child: Text("Nothing here yet!", 
-                    style: TextStyle(color: contrastColor, fontSize: 15)),
+                child: Text(
+                  "Nothing here yet!",
+                  style: TextStyle(
+                    color: state.currContrastColor,
+                    fontSize: 15,
+                  ),
+                ),
               )
             else
               SizedBox(
-                height: _SplashSize + 8,
+                height: _SplashSize + _ColorsLibItem.SplashShadowSize * 2,
                 child: Row(
                   children: [
                     Expanded(
@@ -44,11 +48,11 @@ class ColorsLib extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
 
                         itemBuilder: (_, index) {
-                          final Color item = s.savedColors[index];
+                          final Color item = state.savedColors[index];
 
-                          return ColorsLibItem(size: _SplashSize, color: item);
+                          return _ColorsLibItem(size: _SplashSize, color: item);
                         },
-                        itemCount: s.savedColors.length,
+                        itemCount: state.savedColors.length,
                       ),
                     ),
                   ],
@@ -61,23 +65,28 @@ class ColorsLib extends StatelessWidget {
   }
 }
 
-class ColorsLibItem extends StatelessWidget {
+class _ColorsLibItem extends StatelessWidget {
   final Color color;
   final double size;
 
-  const ColorsLibItem({required this.size, required this.color, super.key});
+  static const double SplashShadowSize = 3;
+
+  const _ColorsLibItem({required this.size, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
-      builder: (_, s, __) {
-        final Color contrastColor = getContrastColor(s.currColor);
-        final bool isSelected = s.currColor == color;
+      builder: (_, state, __) {
+        final bool isSelected = state.currColor == color;
 
         return Padding(
-          padding: const EdgeInsets.only(right: 13, bottom: 4, top: 4),
+          padding: const EdgeInsets.only(
+            right: 13,
+            bottom: SplashShadowSize,
+            top: SplashShadowSize,
+          ),
           child: InkWell(
-            onTap: () => s.setCurrColor(color),
+            onTap: () => state.setCurrColor(color),
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -90,13 +99,16 @@ class ColorsLibItem extends StatelessWidget {
 
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.shade500,
-                        spreadRadius: 2,
-                        blurRadius: 2,
+                        color: state.currContrastColor.withOpacity(0.2),
+                        spreadRadius: SplashShadowSize,
+                        blurRadius: SplashShadowSize,
                       ),
                     ],
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(width: 5, color: contrastColor),
+                    border: Border.all(
+                      width: 5,
+                      color: state.currContrastColor,
+                    ),
                   ),
                 ),
 

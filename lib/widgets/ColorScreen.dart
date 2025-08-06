@@ -5,6 +5,7 @@ import 'package:solid_test_task/utils.dart';
 import 'package:solid_test_task/widgets/ColorActions.dart';
 import 'package:solid_test_task/widgets/ColorsLib.dart';
 
+/// Main colored screen of the App
 class ColorScreen extends StatelessWidget {
   const ColorScreen({super.key});
 
@@ -29,7 +30,10 @@ class ColorScreen extends StatelessWidget {
                       child: Text(
                         "Solid software Test task",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: state.currContrastColor, fontSize: 18),
+                        style: TextStyle(
+                          color: state.currContrastColor,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
 
