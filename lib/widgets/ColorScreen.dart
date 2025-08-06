@@ -6,20 +6,19 @@ import 'package:solid_test_task/widgets/ColorActions.dart';
 import 'package:solid_test_task/widgets/ColorsLib.dart';
 
 class ColorScreen extends StatelessWidget {
+  const ColorScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
-      builder: (_, s, __) {
-        final Color contrastColor = getContrastColor(s.currColor);
-
+      builder: (_, state, __) {
         return Scaffold(
           body: GestureDetector(
-            onTap: () => s.setCurrColor(getRandomColor()),
+            onTap: () => state.setCurrColor(getRandomColor()),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              color: s.currColor,
+              color: state.currColor,
               child: SafeArea(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,7 +29,7 @@ class ColorScreen extends StatelessWidget {
                       child: Text(
                         "Solid software Test task",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: contrastColor, fontSize: 18),
+                        style: TextStyle(color: state.currContrastColor, fontSize: 18),
                       ),
                     ),
 
@@ -41,7 +40,7 @@ class ColorScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
-                            color: contrastColor,
+                            color: state.currContrastColor,
                           ),
                         ),
                         const ColorActions(),

@@ -3,54 +3,69 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:solid_test_task/storage/iStorage.dart';
 import 'package:solid_test_task/storage/prefsStorage.dart';
+import 'package:solid_test_task/utils.dart';
 
 class AppState extends ChangeNotifier {
   static const Color DefaultColor = Colors.white;
-  Color _color = DefaultColor;
 
+  Color _color = DefaultColor;
   final List<Color> _saved = [];
 
-  final Storage storage = PrefStorage.instance;
+  final Storage _storage = PrefStorage.instance;
+
+  /// color of main screen
+  Color get currColor => _color;
+
+  /// contrasting color of current main screen color
+  /// used in main screen elements to ensure good visibility
+  ///
+  /// not very good that it re-computes value each time its called, but
+  /// getContrastColor is not a very expensive operation
+  Color get currContrastColor => getContrastColor(_color);
+
+  // colors user saved
+  UnmodifiableListView<Color> get savedColors => UnmodifiableListView(_saved);
 
   AppState() {
     _loadFromStorage();
   }
 
   Future<void> _loadFromStorage() async {
-    final Color? last = await storage.getLastColor();
-
+    final Color? last = await _storage.getLastColor();
     _color = last ?? DefaultColor;
 
-    final List<Color> saved = await storage.getSavedColors();
+    final List<Color> saved = await _storage.getSavedColors();
+    _saved.clear();
     _saved.addAll(saved);
 
     notifyListeners();
   }
 
-  Color get currColor => _color;
-
-  UnmodifiableListView<Color> get saved => UnmodifiableListView(_saved);
-
+  /// update curr color of main screen
+  /// and persist it to show it first on next app open
   void setCurrColor(Color upd) {
     _color = upd;
-    storage.saveLastColor(currColor);
+    _storage.saveLastColor(currColor);
 
     notifyListeners();
   }
 
-  void saveCurrColor() {
-    if (_saved.contains(_color)) return;
+  /// save color to user's color collection
+  void addColorToSaved(Color toSave) {
+    if (_saved.contains(toSave)) return;
 
-    _saved.add(_color);
-    storage.saveColorToLib(_color);
+    _saved.add(toSave);
+    _storage.saveColorToLib(toSave);
 
     notifyListeners();
   }
 
   void deleteFromSaved(Color color) {
     _saved.remove(color);
-    storage.deleteColorFromLib(color);
+    _storage.deleteColorFromLib(color);
 
     notifyListeners();
   }
+
+  bool isColorSaved(Color toCheck) => _saved.contains(toCheck);
 }

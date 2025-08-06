@@ -19,18 +19,22 @@ class PrefStorage implements Storage {
 
   PrefStorage._privateConstructor();
 
+  @override
   Future<Color?> getLastColor() async {
-    final Object? res = (await prefs).get(_LastColorKey);
+    final SharedPreferences pr = await prefs;
+    final Object? res = pr.get(_LastColorKey);
     if (res == null) return null;
 
     return _parseColorStr(res as String);
   }
 
+  @override
   Future<void> saveLastColor(Color color) async {
     final SharedPreferences pr = await prefs;
     await pr.setString(_LastColorKey, _getColorStr(color));
   }
 
+  @override
   Future<void> saveColorToLib(Color color) async {
     final SharedPreferences pr = await prefs;
 
@@ -40,6 +44,7 @@ class PrefStorage implements Storage {
     await pr.setStringList(_SavedColorsKey, toStr);
   }
 
+  @override
   Future<void> deleteColorFromLib(Color color) async {
     final SharedPreferences pr = await prefs;
 
@@ -53,6 +58,7 @@ class PrefStorage implements Storage {
     await pr.setStringList(_SavedColorsKey, updated);
   }
 
+  @override
   Future<List<Color>> getSavedColors() async {
     final SharedPreferences pr = await prefs;
 

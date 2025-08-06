@@ -10,19 +10,20 @@ class ColorActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (_, state, __) {
-        final contrastColor = getContrastColor(state.currColor);
-
-        if (state.saved.contains(state.currColor)) {
+        if (state.isColorSaved(state.currColor)) {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _SavedBadge(color: state.currColor),
+              const _SavedBadge(),
               const SizedBox(width: 5),
               TextButton(
                 onPressed: () => state.deleteFromSaved(state.currColor),
                 child: Text(
                   "Delete from lib",
-                  style: TextStyle(color: contrastColor, fontSize: 17),
+                  style: TextStyle(
+                    color: state.currContrastColor,
+                    fontSize: 17,
+                  ),
                 ),
               ),
             ],
@@ -30,14 +31,13 @@ class ColorActions extends StatelessWidget {
         }
 
         return ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: contrastColor),
-          onPressed: Provider.of<AppState>(
-            context,
-            listen: false,
-          ).saveCurrColor,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: state.currContrastColor,
+          ),
+          onPressed: () => state.addColorToSaved(state.currColor),
           child: Text(
             "Save color",
-            style: TextStyle(color: getContrastColor(contrastColor)),
+            style: TextStyle(color: getContrastColor(state.currContrastColor)),
           ),
         );
       },
@@ -46,28 +46,27 @@ class ColorActions extends StatelessWidget {
 }
 
 class _SavedBadge extends StatelessWidget {
-  final Color color;
-
-  const _SavedBadge({required this.color});
+  const _SavedBadge();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(7, 3, 10, 3),
-      decoration: BoxDecoration(
-        color: getContrastColor(context.watch<AppState>().currColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.check, color: context.watch<AppState>().currColor, size: 18),
-          const SizedBox(width: 4),
-          Text(
-            "Saved",
-            style: TextStyle(color: context.watch<AppState>().currColor),
+    return Consumer<AppState>(
+      builder: (_, state, __) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(7, 3, 10, 3),
+          decoration: BoxDecoration(
+            color: state.currContrastColor,
+            borderRadius: BorderRadius.circular(10),
           ),
-        ],
-      ),
+          child: Row(
+            children: [
+              Icon(Icons.check, color: state.currColor, size: 18),
+              const SizedBox(width: 4),
+              Text("Saved", style: TextStyle(color: state.currColor)),
+            ],
+          ),
+        );
+      },
     );
   }
 }

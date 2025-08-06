@@ -4,10 +4,10 @@ import 'package:solid_test_task/AppState.dart';
 import 'package:solid_test_task/utils.dart';
 
 class ColorsLib extends StatelessWidget {
+  static const double _SplashSize = 60;
+
   @override
   Widget build(BuildContext context) {
-    const double _SplashSize = 60;
-
     return Consumer<AppState>(
       builder: (_, s, __) {
         final Color contrastColor = getContrastColor(s.currColor);
@@ -27,7 +27,7 @@ class ColorsLib extends StatelessWidget {
               ),
             ),
 
-            if (s.saved.isEmpty)
+            if (s.savedColors.isEmpty)
               Padding(
                 padding: const EdgeInsets.only(left: 25),
                 child: Text("Nothing here yet!", 
@@ -44,11 +44,11 @@ class ColorsLib extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
 
                         itemBuilder: (_, index) {
-                          final Color item = s.saved[index];
+                          final Color item = s.savedColors[index];
 
                           return ColorsLibItem(size: _SplashSize, color: item);
                         },
-                        itemCount: s.saved.length,
+                        itemCount: s.savedColors.length,
                       ),
                     ),
                   ],
